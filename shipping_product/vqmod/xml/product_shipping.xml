@@ -13,6 +13,9 @@
 			<add>
 				<![CDATA[
 					//Set cart texts
+                  
+                    $this->load->language('module/product_shipping');  
+ 
 					$this->data['text_shipping_estimate'] = $this->language->get('text_shipping_estimate');
 					$this->data['text_shipping_detail'] = $this->language->get('text_shipping_detail');
 					$this->data['text_shipping_method'] = $this->language->get('text_shipping_method');
