@@ -105,7 +105,11 @@
   	}
 
 	public function quote() {
-		$this->load->language('total/shipping');
+    if (version_compare(VERSION, '2.2.0.0', '>')) {
+      $this->load->language('extension/total/shipping');
+    } else {
+      $this->load->language('total/shipping');
+    }
 
 		$json = array();
 
