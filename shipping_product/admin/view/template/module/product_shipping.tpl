@@ -22,16 +22,16 @@
 			<tbody>
 				<tr>
 					<td><label><?php echo $entry_header ?></label></td>
-					<td><input type="text" name="header_title" value="<?php echo ($modules['header_title']) ? $modules['header_title'] : ''; ?>" ></td>
+					<td><input type="text" name="header_title" value="<?php echo $header_title ? $header_title : ''; ?>" ></td>
 				</tr>
 				<tr>
 					<td><label><?php echo $entry_popup; ?></label></td>
-					<td><input type="text" name="popup_title" value="<?php echo ($modules['popup_title']) ? $modules['popup_title'] : ''; ?>" ></td>
+					<td><input type="text" name="popup_title" value="<?php echo $popup_title ? $popup_title : ''; ?>" ></td>
 				</tr>
 				<tr>
-					<td><?php echo $geo_need; ?></td>
+					<td><?php echo $entry_geo_need; ?></td>
 					<td>
-						<?php if ($modules['geo_need']) { ?>
+						<?php if ($geo_need) { ?>
 						<input type="radio" name="geo_need" value="1" checked="checked" />
 						<?php echo $text_yes; ?>
 						<input type="radio" name="geo_need" value="0" />
@@ -48,7 +48,7 @@
 					<td><?php echo $entry_enabled; ?></td>
 					<td class="left">
 						<select name="enabled">
-							<?php if ($modules['enabled']) { ?>
+							<?php if ($enabled) { ?>
 							<option value="1" selected="selected"><?php echo $text_enabled; ?></option>
 							<option value="0"><?php echo $text_disabled; ?></option>
 							<?php } else { ?>
