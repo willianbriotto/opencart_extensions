@@ -14,7 +14,11 @@ class ControllerModuleEstimateShipping extends Controller {
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
-			$this->response->redirect($this->url->link('extension/module', 'token=' . $this->session->data['token'], 'SSL'));
+			if (version_compare(VERSION, '2.2.0.0', '>')) {
+				$this->response->redirect($this->url->link('extension/extension', 'token=' . $this->session->data['token'] . '&type=module', 'SSL'));
+			} else {
+				$this->response->redirect($this->url->link('extension/module', 'token=' . $this->session->data['token'], 'SSL'));
+			}
 		}
 
 		$data['heading_title'] = $this->language->get('heading_title');
