@@ -218,10 +218,13 @@
 		//Remove temp cart
 		$this->cart->clear();
 		//Add temp itens to cart
-		foreach ($this->session->data['cacheCart'] as $product_cart) :
-			$this->cart->add($product_cart['product_id'], $product_cart['quantity'],
-					         $product_cart['option'], $this->session->data['PID']);
-		endforeach;
+		foreach ($this->session->data['cacheCart'] as $product_cart){
+			foreach ($product_cart['option'] as $product_option){
+					$option[$product_option['product_option_id']]=$product_option['product_option_value_id'];
+			}
+			$this->cart->add($product_cart['product_id'], $product_cart['quantity'], $option, $this->session->data['PID']);
+		}
+		
 		unset($this->session->data['cacheCart']);
 		unset($this->session->data['PID']);
 
