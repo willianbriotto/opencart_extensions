@@ -1,5 +1,6 @@
 <?php
 // Heading
+$_['text_extension']   = 'Extensions';
 $_['text_module']      = 'Modules';
 $_['text_edit'] = $_['heading_title'] = 'Shipping page Product';
 $_['geo_description'] = 'You need of geo informations to calcule the shipping? If yes : It will be shown the fields Country and Region / State';
