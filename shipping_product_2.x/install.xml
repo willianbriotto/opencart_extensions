@@ -219,6 +219,7 @@
 		$this->cart->clear();
 		//Add temp itens to cart
 		foreach ($this->session->data['cacheCart'] as $product_cart){
+			$option = array();
 			foreach ($product_cart['option'] as $product_option){
 					$option[$product_option['product_option_id']]=$product_option['product_option_value_id'];
 			}
