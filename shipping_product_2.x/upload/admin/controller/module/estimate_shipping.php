@@ -14,7 +14,11 @@ class ControllerModuleEstimateShipping extends Controller {
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
-			$this->response->redirect($this->url->link('extension/module', 'token=' . $this->session->data['token'], 'SSL'));
+			if (version_compare(VERSION, '2.2.0.0', '>')) {
+				$this->response->redirect($this->url->link('extension/extension', 'token=' . $this->session->data['token'] . '&type=module', 'SSL'));
+			} else {
+				$this->response->redirect($this->url->link('extension/module', 'token=' . $this->session->data['token'], 'SSL'));
+			}
 		}
 
 		$data['heading_title'] = $this->language->get('heading_title');
@@ -46,19 +50,35 @@ class ControllerModuleEstimateShipping extends Controller {
 			'href' => $this->url->link('common/dashboard', 'token=' . $this->session->data['token'], 'SSL')
 		);
 
-		$data['breadcrumbs'][] = array(
-			'text' => $this->language->get('text_module'),
-			'href' => $this->url->link('extension/module', 'token=' . $this->session->data['token'], 'SSL')
-		);
+    if (version_compare(VERSION, '2.2.0.0', '>')) {
+       $data['breadcrumbs'][] = array(
+           'text' => $this->language->get('text_extension'),
+           'href' => $this->url->link('extension/extension', 'token=' . $this->session->data['token'], 'SSL')
+       );
 
-		$data['breadcrumbs'][] = array(
-			'text' => $this->language->get('heading_title'),
-			'href' => $this->url->link('module/estimate_shipping', 'token=' . $this->session->data['token'], 'SSL')
-		);
+       $data['breadcrumbs'][] = array(
+           'text' => $this->language->get('heading_title'),
+           'href' => $this->url->link('extension/module/estimate_shipping', 'token=' . $this->session->data['token'], 'SSL')
+       );
 
-		$data['action'] = $this->url->link('module/estimate_shipping', 'token=' . $this->session->data['token'], 'SSL');
+       $data['action'] = $this->url->link('extension/module/estimate_shipping', 'token=' . $this->session->data['token'], 'SSL');
 
-		$data['cancel'] = $this->url->link('extension/module', 'token=' . $this->session->data['token'], 'SSL');
+       $data['cancel'] = $this->url->link('extension/extension', 'token=' . $this->session->data['token'] . '&type=module', 'SSL');
+   } else {
+       $data['breadcrumbs'][] = array(
+           'text' => $this->language->get('text_module'),
+           'href' => $this->url->link('extension/module', 'token=' . $this->session->data['token'], 'SSL')
+       );
+
+       $data['breadcrumbs'][] = array(
+           'text' => $this->language->get('heading_title'),
+           'href' => $this->url->link('module/estimate_shipping', 'token=' . $this->session->data['token'], 'SSL')
+       );
+
+       $data['action'] = $this->url->link('module/estimate_shipping', 'token=' . $this->session->data['token'], 'SSL');
+
+       $data['cancel'] = $this->url->link('extension/module', 'token=' . $this->session->data['token'], 'SSL');
+   }
 
 		if (isset($this->request->post['estimate_shipping_header_title'])) {
 			$data['estimate_shipping_header_title'] = $this->request->post['estimate_shipping_header_title'];
@@ -92,7 +112,9 @@ class ControllerModuleEstimateShipping extends Controller {
 	}
 
 	protected function validate() {
-		if (!$this->user->hasPermission('modify', 'module/estimate_shipping')) {
+		$path = version_compare(VERSION, '2.2.0.0', '>') ? 'extension/module/estimate_shipping' : 'module/estimate_shipping';
+
+		if (!$this->user->hasPermission('modify', $path)) {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
 

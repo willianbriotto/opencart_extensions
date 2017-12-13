@@ -7,67 +7,70 @@
 	<code>estimate_shipping_product_page_ocmod</code>
     <file path="catalog/controller/product/product.php">
         <operation>
-            <search><![CDATA[$data['button_continue'] = $this->language->get('button_continue');]]></search>
-            <add position="after"><![CDATA[
-			/**
-			 * Cart language
-			 **/
-			$this->load->language('checkout/checkout');
+		<search trim="true"><![CDATA[$data['entry_qty'] = $this->language->get('entry_qty');]]></search>
+            <add position="before"><![CDATA[
+      /**
+       * Cart language
+       **/
+      $this->load->language('checkout/checkout');
 
-			$data['text_address_existing'] = $this->language->get('text_address_existing');
-			$data['text_address_new'] = $this->language->get('text_address_new');
-			$data['text_select'] = $this->language->get('text_select');
-			$data['text_none'] = $this->language->get('text_none');
-			$data['text_loading'] = $this->language->get('text_loading');
-			$data['text_shipping_method'] = $this->language->get('text_shipping_method');
+      $data['text_address_existing'] = $this->language->get('text_address_existing');
+      $data['text_address_new'] = $this->language->get('text_address_new');
+      $data['text_select'] = $this->language->get('text_select');
+      $data['text_none'] = $this->language->get('text_none');
+      $data['text_loading'] = $this->language->get('text_loading');
+      $data['text_shipping_method'] = $this->language->get('text_shipping_method');
 
-	 		$data['entry_postcode'] = $this->language->get('entry_postcode');
-	 		$data['entry_city'] = $this->language->get('entry_city');
-	 		$data['entry_country'] = $this->language->get('entry_country');
-	 		$data['entry_zone'] = $this->language->get('entry_zone');
+      	$data['entry_postcode'] = $this->language->get('entry_postcode');
+      	$data['entry_city'] = $this->language->get('entry_city');
+      	$data['entry_country'] = $this->language->get('entry_country');
+      	$data['entry_zone'] = $this->language->get('entry_zone');
 
-			$data['button_quote'] = $this->language->get('button_quote');
-			$data['button_shipping'] = $this->language->get('button_shipping');
-			$data['button_cancel'] = $this->language->get('button_cancel');
+      $data['button_quote'] = $this->language->get('button_quote');
+      $data['button_shipping'] = $this->language->get('button_shipping');
+      $data['button_cancel'] = $this->language->get('button_cancel');
 
-			$this->load->model('account/address');
+      $this->load->model('account/address');
 
-			$data['addresses'] = $this->model_account_address->getAddresses();
+      $data['addresses'] = $this->model_account_address->getAddresses();
 
-			if (isset($this->session->data['shipping_address']['postcode'])) {
-				$data['postcode'] = $this->session->data['shipping_address']['postcode'];
-			} else {
-				$data['postcode'] = '';
-			}
+      if (isset($this->session->data['shipping_address']['postcode'])) {
+      	$data['postcode'] = $this->session->data['shipping_address']['postcode'];
+      } else {
+      	$data['postcode'] = '';
+      }
 
-			if (isset($this->session->data['shipping_address']['country_id'])) {
-				$data['country_id'] = $this->session->data['shipping_address']['country_id'];
-			} else {
-				$data['country_id'] = $this->config->get('config_country_id');
-			}
+      if (isset($this->session->data['shipping_address']['country_id'])) {
+      	$data['country_id'] = $this->session->data['shipping_address']['country_id'];
+      } else {
+      	$data['country_id'] = $this->config->get('config_country_id');
+      }
 
-			if (isset($this->session->data['shipping_address']['zone_id'])) {
-				$data['zone_id'] = $this->session->data['shipping_address']['zone_id'];
-			} else {
-				$data['zone_id'] = '';
-			}
+      if (isset($this->session->data['shipping_address']['zone_id'])) {
+      	$data['zone_id'] = $this->session->data['shipping_address']['zone_id'];
+      } else {
+      	$data['zone_id'] = '';
+      }
 
-			$this->load->model('localisation/country');
+      $this->load->model('localisation/country');
 
-			$data['countries'] = $this->model_localisation_country->getCountries();
+      $data['countries'] = $this->model_localisation_country->getCountries();
 
-			if (isset($this->session->data['shipping_method'])) {
-				$data['shipping_method'] = $this->session->data['shipping_method']['code'];
-			} else {
-				$data['shipping_method'] = '';
-			}
+      if (isset($this->session->data['shipping_method'])) {
+      	$data['shipping_method'] = $this->session->data['shipping_method']['code'];
+      } else {
+      	$data['shipping_method'] = '';
+      }
 
-			$this->load->model('setting/setting');
-			$data['estimate_shipping'] = $this->model_setting_setting->getSetting('estimate_shipping', $store_id = 0);
-			/**
-			 * Cart language
-			 **/
-            ]]></add>
+      $this->load->model('setting/setting');
+      $data['estimate_shipping'] = $this->model_setting_setting->getSetting('estimate_shipping', $store_id = 0);
+      /**
+       * Cart language
+       **/
+
+
+
+             ]]></add>
         </operation>
         <operation>
             <search><![CDATA[public function getRecurringDescription() { ]]></search>
@@ -102,7 +105,11 @@
   	}
 
 	public function quote() {
-		$this->load->language('total/shipping');
+    if (version_compare(VERSION, '2.2.0.0', '>')) {
+      $this->load->language('extension/total/shipping');
+    } else {
+      $this->load->language('total/shipping');
+    }
 
 		$json = array();
 
@@ -183,9 +190,13 @@
 
 			foreach ($results as $result) {
 				if ($this->config->get($result['code'] . '_status')) {
-					$this->load->model('shipping/' . $result['code']);
-
-					$quote = $this->{'model_shipping_' . $result['code']}->getQuote($this->session->data['shipping_address']);
+          if (version_compare(VERSION, '2.2.0.0', '>')) {
+            $this->load->model('extension/shipping/' . $result['code']);
+            $quote = $this->{'model_extension_shipping_' . $result['code']}->getQuote($this->session->data['shipping_address']);
+          } else {
+            $this->load->model('shipping/' . $result['code']);
+            $quote = $this->{'model_shipping_' . $result['code']}->getQuote($this->session->data['shipping_address']);
+          }
 
 					if ($quote) {
 						$quote_data[$result['code']] = array(
@@ -280,7 +291,7 @@
             <search><![CDATA[<input type="text" name="quantity" value="<?php echo $minimum; ?>" size="2" id="input-quantity" class="form-control" />]]></search>
             <add position="after"><![CDATA[
               <!-- Shipping calculate -->
-              <?php if(isset($estimate_shipping) && $estimate_shipping['estimate_shipping_status']) { ?>
+              <?php if(isset($estimate_shipping) && isset($estimate_shipping['estimate_shipping_status']) && $estimate_shipping['estimate_shipping_status']) { ?>
               <h3><?php echo $estimate_shipping['estimate_shipping_header_title']; ?></h3>
               <div class="form-horizontal">
                 <?php if($estimate_shipping['estimate_shipping_geo']) { ?>
@@ -459,6 +470,6 @@ $('select[name=\'country_id\']').on('change', function() {
 $('select[name=\'country_id\']').trigger('change');
 </script>
             ]]></add>
-        </operation>		
+        </operation>
     </file>
 </modification>

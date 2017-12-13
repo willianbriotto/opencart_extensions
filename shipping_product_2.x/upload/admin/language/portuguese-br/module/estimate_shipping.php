@@ -1,5 +1,6 @@
 <?php
 // Heading
+$_['text_extension']   = 'Extensões';
 $_['text_module']      = 'Módulos';
 $_['text_edit'] = $_['heading_title'] = 'Calcular frete ná pagina do produto';
 $_['geo_description'] = 'Você precisa de informações geo zone para calcular frete? Sim: Ele mostrará os campos de país e estado';
